@@ -1,4 +1,4 @@
-#Tổng quan ARP (ARP cache, Proxy ARP...)
+# Tổng quan ARP (ARP cache, Proxy ARP...)
 - [1. Định nghĩa ARP](#arpdefinition)
 - [2. Cơ chế hoạt động](#protocol)
 - [3. ARP caching](#cache)
@@ -11,18 +11,18 @@
 - Có 2 phương pháp phân giải địa chỉ : map trực tiếp và phân giải động.Việc Map trực tiếp gặp nhiều khó khăn do địa chỉ MAC(datalink) có 48bit trong khi địa chỉ IP(network) là 32 bit. Để linh hoat sử dụng nên ARP ra đời, theo chuẩn RFC 826. 
  
 <a name="arpdefinition"></a>
-###1. Định nghĩa ARP
+
+### 1. Định nghĩa ARP
  ARP là giao thức phân giải địa chỉ
 động giữa địa chỉ network và địa chỉ datalink. Quá trình thực hiện bằng cách: một thiết bị IP trong mạng gửi một gói tin local broadcast đến toàn mạng yêu cầu thiết bị khác gửi trả lại địa chỉ phần cứng ( địa chỉ lớp datalink ) hay còn gọi là Mac Address của mình.
 
  Ban đầu ARP chỉ **được sử dụng trong mạng Ethernet** để phân giải địa chỉ IP và địa chỉ MAC. Nhưng ngày nay ARP đã được ứng dụng rộng rãi và dùng trong các công nghệ khác dựa trên lớp hai.
 
 <a name="protocol"></a>
-###2. Cơ chế hoạt động
+### 2. Cơ chế hoạt động
 
 <img src="https://imgur.com/zmA6Jmk">
 Quá trình thực hiện ARP được bắt đầu khi một thiết bị nguồn trong một mạng IP có nhu cầu gửi một gói tin IP.
- 
 Đầu tiêu thiết bị A kiểm tra địa chỉ IP đích của gói tin có nằm cùng mạng local của mình hay ko bằng cách gửi ARP request là bản tin broadcast đến tất cả thiết bị trong mạng local. Nếu có thì A sẽ nhận được bản tin unicast trực tiếp từ B. Ta biết răng việc gửi gói tin trong cùn một mạng thông qua switch là dựa vào MAC address. Nếu địa chỉ IP của B nằm trên vùng mạng khác, thì A sẽ gửi  ARP request đến router nằm trên cùng mạng nội bộ. Gói tin được đóng gói sau đó chuyển qua quá trình phân giải địa chỉ ARP và được chuyển đi. Đến router nội bộ thì router sẽ dùng **proxy ARP** để respone lại cho A.
 
 Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thiết bị cùng mạng nội bộ. Thiết bị source request bằng cách gửi bản tin broadcast đến toàn bộ thiết bị cùng mạng và thiết bị destination response bằng một bản tin unicast cho thiết bị source.
@@ -36,7 +36,8 @@ Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thi�
 3. Target Hardware Address : Địa chỉ lớp hai ( địa chỉ phần cứng ) của thiết bị đích của bản tin 
 4. Target Protocol Address : Địa chỉ lớp ba ( hay địa chỉ logic ) của thiết bị đích của bản tin.
 
-###Các bước hoạt động của ARP:
+#### Các bước hoạt động của ARP:
+
 1. Source Device Checks Cache : Trong bước này, thiết bị sẽ kiểm tra cache ( bộ đệm ) của mình. Nếu đã có địa chỉ IP đích tương ứng với MAC nào đó rồi thì lập tức chuyển sang [bước 9](#9)
 
 2. Source Device Generates ARP Request Message : Bắt đầu khởi tạo gói tin ARP Request với các trường địa chỉ như trên
