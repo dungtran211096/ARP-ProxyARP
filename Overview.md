@@ -117,15 +117,19 @@ A sau đó sẽ gửi các gói tin cho router, và router sẽ forward sang cho
 một router kết nối hai mạng LAN 172.16.10.0/24 và 172.16.20.0/24 tuy nhiên chỉ có Host A là có subnet là /16 nên khi mà A muốn liên lạc với C hoặc D nó sẽ nghĩ rằng là đang cùng mạng với C và D lúc này nó sẽ gửi gói tin ARP để xin địa chỉ MAC tương ứng. và điều chắc chắn là không thể nhận được Arp Replay nếu như không thiết lập Proxy Arp trên Router. Lúc này khi nhận được gói tin Arp của A thay vì forward thì router sẽ xem xét nó có đường tời C và D hay không nếu  có nó sẽ trả lời cho A gói tin Arp reply nhưng với địa chỉ Mac là cổng nối trực tiếp với A. `00-00-0c-94-36-ab`
 
 Gói tin A broadcast trên subnet A:
+
 <img src="https://i.imgur.com/IbW2hl3.png">
 
 Gói tin router gửi trả lời cho A:
- <img src="https://i.imgur.com/vR7cwDM.png">
+
+<img src="https://i.imgur.com/vR7cwDM.png">
 
 Sau khi nhận được ARP reply, Host A sẽ cập nhật ARP table:
+
 <img src="https://i.imgur.com/WnMTEUf.png)">
 
 ARP cache của Host A:
+
 <img src="https://i.imgur.com/6uWtENn.png)">
 
 #####Ưu điểm và nhược điểm của Proxying
