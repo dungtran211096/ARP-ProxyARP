@@ -56,3 +56,85 @@ Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thi�
 
 9. Source Device Updates ARP Cache : Thiết bị nguồn update vào ARP cache của mình giá trị tương ứng giữa địa chỉ network và địa chỉ datalink của thiết bị đích. Lần sau sẽ không còn cần tới request <a name="9"></a>
 
+<a name="cache"></a>
+### 3.ARP caching 
+ARP là một giao thức phân giải địa chỉ động. Quá trình gửi gói tin Request và Reply sẽ tiêu tốn băng thông mạng. Chính vì vậy càng hạn chế tối đa việc gửi gói tin Request và Reply sẽ càng góp phần làm tăng khả năng họat động của mạng. Từ đó sinh ra nhu cầu của ARP Caching.
+
+##### Các thành phần tĩnh và động của ARP cache
+
+ARP Cache có dạng giống như một bảng map giữa địa chỉ hardware và địa chỉ IP. Có hai cách đưa các thành phần tương ứng vào bảng ARP:
+
+**- Các thành phần arp cache tĩnh:** Đây là cách mà các thành phần tương ứng trong bảng ARP được đưa vào lần lượt bởi người quản trị. Công việc được tiến hành một cách thủ công.
+
+<img src="https://i.imgur.com/x4kf5zM.png">
+
+**- Các thành phần arp cache động:**  Đây là quá trình mà các thành phần địa chỉ hardware/IP được đưa vào ARP cache một cách hoàn toàn tự động bằng phần mềm sau khi đã hoàn tất quá trình phân giải địa chỉ. Chúng được lưu trong cache trong một khoảng thời gian và sau đó sẽ được xóa đi.
+
+Dynamic Cache được sử dụng rộng rãi hơn vì tất cả các quá trình diễn ra tự động và không cần đến sự tương tác của người quản trị. Tuy nhiên static cache vẫn có phạm vi ứng dụng nhất định của nó. Đó là trường hợp mà các workstation nên có static ARP entry đến router và file server nằm trong mạng. Điều này sẽ hạn chế việc gửi các gói tin để thực hiện quá trình phân giải địa chỉ.
+
+Tuy nhiên ngoài hạn chế của việc phải nhập bằng tay, static cache còn thêm hạn chế nữa là khi địa chỉ IP của các thiết bị trong mạng thay đổi thì sẽ dẫn đến việc phải thay đổi ARP cache.
+
+#### Xóa thông tin trong cache
+Ta xét trường hợp bảng cache của một thiết bị A, trong đó có chứa thông tin về thiết bị B trong mạng. Nếu các thông tin trong cache được lưu mãi mãi, sẽ có một số vấn đề như sau xảy ra :
+
+- Địa chỉ phần cứng thiết vị được thay đổi : Đây là trường hợp khi thiết bị B được thay đổi card mạng hay thiết bị giao tiếp, làm thay đổi địa chỉ MAC của thiết bị. Điều này làm cho các thông tin trong cache của A không còn đúng nữa.
+
+- Địa chỉ IP của thiết bị được thay đổi : Người quản trị hay nhà cung cấp thay đổi địa chỉ IP của B, cũng làm cho thông tin trong cache của A bị sai lệch.
+
+- Thiết bị được rút ra khỏi mạng : Khi B được rút ra khỏi mạng nhưng A không được biết, và gây lãng phí về tài nguyên của A để lưu thông tin không cần thiết và tốn thời gian để tìm kiếm.
+
+Để tránh được những vấn đề này, các thông tin trong dynamic cache sẽ được tự động xóa sau một khoảng thời gian nhất định. Quá trình này được thực hiện một cách hoàn toàn tự động khi sử dụng ARP với khoảng thời gian thường là 10 hoặc 20 phút. Sau một khoảng thời gian nhất định được lưu trong cache , thông tin sẽ được xóa đi. Lần sử dụng sau, thông tin sẽ được update trở lại.
+
+<a name="proxy"></a>
+### 4.Proxy ARP
+ Tuy nhiên nếu hai thiết bị A và B bị chia cắt bởi 1 router thì chúng sẽ được coi như là không local với nhau nữa. Khi A muốn gửi thông tin đến B, A sẽ không gửi trực tiếp được đến B theo địa chỉ datalink layer, mà phải gửi qua router và được coi là cách nhau 1 hop ở network layer.
+
+
+**Vì sao cần phải có Proxy ARP?**
+
+Khác với các trường hợp thông thường, nhiều trường hợp hai thiết bị A và B nằm trên 2 segment vật lý khác nhau nhưng được kết nối qua một router và cùng nằm trong một mạng IP hay một IP subnet. Lúc này A và B sẽ coi nhau có quan hệ local.
+
+Giả sử ta có tình huống A muốn gửi thông tin cho B. A nghĩ B trong cùng nội mạng và tìm trong bảng ARP cache. A không lưu địa chỉ MAC của B và bắt đầu tiến hành quá trình phân giải địa chỉ. A broadcast gói ARP request trong nội mạng để tìm địa chỉ MAC của B. Sẽ có vấn đề xảy ra : B không cùng nằm trong mạng và sẽ không nhận được gói tin broadcast cũng như router kết nối sẽ không forward gói broadcasr từ A qua B ( router không truyền các gói broadcast ở lớp datalink ).
+<img src="https://i.imgur.com/V4P8JM2.png">
+Vì vậy B không bao giờ nhận được request từ A cũng như A sẽ không bao giờ có được địa chỉ MAC của B.
+
+**Hoạt động của Proxy ARP**
+
+Giải pháp cho tình huống này được gọi là ARP proxying hay Proxy ARP. Trong công nghệ này, router nằm giữa 2 mạng local sẽ được cấu hình để đáp ứng các gói tin broadcast gửi từ A thay cho B.
+
+<img src="https://i.imgur.com/n64HeSZ.png">
+
+Router sẽ không gửi cho A địa chỉ MAC của B, vì dù thế nào A và B cũng nằm trên hai mạng khác nhau và không thể gửi trực tiếp đến nhau được. Thay vào đó router sẽ gửi cho A các địa chỉ MAC của chính router.
+
+<img src="https://i.imgur.com/bkdEsst.png">
+
+A sau đó sẽ gửi các gói tin cho router, và router sẽ forward sang cho B. Quá trình cũng hoàn toàn diễn ra tương tự khi B muốn gửi thông tin cho A, hay cho bất cứ thiết bị nào mà đích đến của gói tin là một thiết bị ở một mạng khác.
+
+*****Ví dụ*****
+
+<img src ="https://i.imgur.com/PSyXZRQ.png">
+
+một router kết nối hai mạng LAN 172.16.10.0/24 và 172.16.20.0/24 tuy nhiên chỉ có Host A là có subnet là /16 nên khi mà A muốn liên lạc với C hoặc D nó sẽ nghĩ rằng là đang cùng mạng với C và D lúc này nó sẽ gửi gói tin ARP để xin địa chỉ MAC tương ứng. và điều chắc chắn là không thể nhận được Arp Replay nếu như không thiết lập Proxy Arp trên Router. Lúc này khi nhận được gói tin Arp của A thay vì forward thì router sẽ xem xét nó có đường tời C và D hay không nếu  có nó sẽ trả lời cho A gói tin Arp reply nhưng với địa chỉ Mac là cổng nối trực tiếp với A. `00-00-0c-94-36-ab`
+
+Gói tin A broadcast trên subnet A:
+<img src="https://i.imgur.com/IbW2hl3.png">
+
+Gói tin router gửi trả lời cho A:
+ <img src="https://i.imgur.com/vR7cwDM.png">
+
+Sau khi nhận được ARP reply, Host A sẽ cập nhật ARP table:
+<img src="https://i.imgur.com/WnMTEUf.png)">
+
+ARP cache của Host A:
+<img src="https://i.imgur.com/6uWtENn.png)">
+
+#####Ưu điểm và nhược điểm của Proxying
+Ưu điểm dễ nhận thấy của Proxy ARP là các router hoạt động nhưng các thiết bị không hề cảm nhận được sự hoạt động của nó. Các hoạt động gửi nhận giữa hai thiết bị thuộc hai LAN khác nhau vẫn diễn ra bình thường.
+
+Hạn chế:
+
+- Thứ nhất, nó làm tăng độ phức tạp của mạng 
+- Thứ hai, nếu nhiều hơn một router kết nối tới hai LAN cùng nằm trong một mạng IP, nhiều vấn đề có thể phát sinh. 
+- Thứ ba, công nghệ này cũng tạo nên những mối nguy cơ tiềm ẩn về an ninh và bảo mật, khi các router được cấu hình proxy, tạo nguy cơ về giả mạo địa chỉ.
+
+Do vậy, giải pháp tốt nhất là thiết kế lại topo mạng để chỉ một router kết nối tới hai LAN nằm trong một mạng IP.
