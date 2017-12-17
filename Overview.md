@@ -23,7 +23,7 @@
 
 <img src="https://i.imgur.com/QVbDoVR.png">
 Quá trình thực hiện ARP được bắt đầu khi một thiết bị nguồn trong một mạng IP có nhu cầu gửi một gói tin IP.
-Đầu tiêu thiết bị A kiểm tra địa chỉ IP đích của gói tin có nằm cùng mạng local của mình hay ko bằng cách gửi ARP request là bản tin broadcast đến tất cả thiết bị trong mạng local. Nếu có thì A sẽ nhận được bản tin unicast trực tiếp từ B. Ta biết răng việc gửi gói tin trong cùn một mạng thông qua switch là dựa vào MAC address. Nếu địa chỉ IP của B nằm trên vùng mạng khác, thì A sẽ gửi  ARP request đến router nằm trên cùng mạng nội bộ. Gói tin được đóng gói sau đó chuyển qua quá trình phân giải địa chỉ ARP và được chuyển đi. Đến router nội bộ thì router sẽ dùng [proxy ARP](#proxy)để respone lại cho A.
+Đầu tiêu thiết bị A kiểm tra địa chỉ IP đích của gói tin có nằm cùng mạng local của mình hay ko bằng cách gửi ARP request là bản tin broadcast đến tất cả thiết bị trong mạng local. Nếu có thì A sẽ nhận được bản tin unicast trực tiếp từ B. Ta biết răng việc gửi gói tin trong cùn một mạng thông qua switch là dựa vào MAC address. Nếu địa chỉ IP của B nằm trên vùng mạng khác, thì A sẽ gửi  ARP request đến router nằm trên cùng mạng nội bộ. Gói tin được đóng gói sau đó chuyển qua quá trình phân giải địa chỉ ARP và được chuyển đi. Đến router nội bộ thì router sẽ dùng   [proxy ARP](#proxy)  để respone lại cho A.
 
 Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thiết bị cùng mạng nội bộ. Thiết bị source request bằng cách gửi bản tin broadcast đến toàn bộ thiết bị cùng mạng và thiết bị destination response bằng một bản tin unicast cho thiết bị source.
 
