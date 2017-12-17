@@ -132,7 +132,7 @@ ARP cache của Host A:
 
 <img src="https://i.imgur.com/6uWtENn.png)">
 
-#####Ưu điểm và nhược điểm của Proxying
+##### Ưu điểm và nhược điểm của Proxying
 Ưu điểm dễ nhận thấy của Proxy ARP là các router hoạt động nhưng các thiết bị không hề cảm nhận được sự hoạt động của nó. Các hoạt động gửi nhận giữa hai thiết bị thuộc hai LAN khác nhau vẫn diễn ra bình thường.
 
 Hạn chế:
