@@ -21,7 +21,7 @@
 <a name="protocol"></a>
 ### 2. Cơ chế hoạt động
 
-<img src="https://imgur.com/zmA6Jmk">
+<img src="https://i.imgur.com/QVbDoVR.png">
 Quá trình thực hiện ARP được bắt đầu khi một thiết bị nguồn trong một mạng IP có nhu cầu gửi một gói tin IP.
 Đầu tiêu thiết bị A kiểm tra địa chỉ IP đích của gói tin có nằm cùng mạng local của mình hay ko bằng cách gửi ARP request là bản tin broadcast đến tất cả thiết bị trong mạng local. Nếu có thì A sẽ nhận được bản tin unicast trực tiếp từ B. Ta biết răng việc gửi gói tin trong cùn một mạng thông qua switch là dựa vào MAC address. Nếu địa chỉ IP của B nằm trên vùng mạng khác, thì A sẽ gửi  ARP request đến router nằm trên cùng mạng nội bộ. Gói tin được đóng gói sau đó chuyển qua quá trình phân giải địa chỉ ARP và được chuyển đi. Đến router nội bộ thì router sẽ dùng **proxy ARP** để respone lại cho A.
 
@@ -29,7 +29,7 @@ Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thi�
 
 *Định dạng gói tin ARP*
 
-<img src="https://imgur.com/dDyXsoW">
+<img src="https://i.imgur.com/dDyXsoW.png">
 
 1. Sender Hardware Address : địa chỉ lớp hai của thiết bị gửi bản tin 
 2. Sender Protocol Address : Địa chỉ lớp ba ( hay địa chỉ logic ) của thiết bị gửi bản tin 
