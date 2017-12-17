@@ -19,6 +19,7 @@
 
 <a name="protocol"></a>
 ###2. Cơ chế hoạt động
+
 <img src="https://imgur.com/zmA6Jmk">
 Quá trình thực hiện ARP được bắt đầu khi một thiết bị nguồn trong một mạng IP có nhu cầu gửi một gói tin IP.
  
@@ -27,6 +28,7 @@ Quá trình thực hiện ARP được bắt đầu khi một thiết bị ngu�
 Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thiết bị cùng mạng nội bộ. Thiết bị source request bằng cách gửi bản tin broadcast đến toàn bộ thiết bị cùng mạng và thiết bị destination response bằng một bản tin unicast cho thiết bị source.
 
 *Định dạng gói tin ARP*
+
 <img src="https://imgur.com/dDyXsoW">
 
 1. Sender Hardware Address : địa chỉ lớp hai của thiết bị gửi bản tin 
@@ -50,5 +52,6 @@ Về cơ bản, ARP là quá trình 2 chiều request/response giữa các thi�
 7. Destination Device Sends ARP Reply Message : Thiết bị đích bắt đầu gửi gói tin Reply đã được khởi tạo đến thiết bị nguồn. Gói tin reply là gói tin gửi unicast
 
 8. Source Device Processes ARP Reply Message : Thiết bị nguồn nhận được gói tin reply và xử lý bằng cách lưu trường Sender Hardware Address trong gói reply như địa chỉ phần cứng của thiết bị đích
-<a name="9"></a>
-9. Source Device Updates ARP Cache : Thiết bị nguồn update vào ARP cache của mình giá trị tương ứng giữa địa chỉ network và địa chỉ datalink của thiết bị đích. Lần sau sẽ không còn cần tới request
+
+9. Source Device Updates ARP Cache : Thiết bị nguồn update vào ARP cache của mình giá trị tương ứng giữa địa chỉ network và địa chỉ datalink của thiết bị đích. Lần sau sẽ không còn cần tới request <a name="9"></a>
+
